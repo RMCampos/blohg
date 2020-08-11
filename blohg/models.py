@@ -212,6 +212,12 @@ class Post(Page):
             return []
         return [i.strip() for i in self._vars['tags'].split(',')]
 
+    @locked_cached_property
+    def lang(self):
+        if 'lang' not in self._vars:
+            return ''
+        return self._vars['lang']
+
 
 class Blog(object):
     """A blog is a list of posts and pages."""
