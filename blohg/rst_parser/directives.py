@@ -19,7 +19,7 @@ from flask import current_app, url_for
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name, TextLexer
-from urllib import pathname2url
+from urllib.request import pathname2url
 
 from blohg.file_like import BlohgFile
 from blohg.rst_parser.nodes import iframe_flash_video
