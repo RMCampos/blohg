@@ -447,6 +447,37 @@ class IncludeHg(Include):
             return []
 
 
+class AudioPlayer(Directive):
+    """reStructuredText directive that simply returns a html5 player with control buttons.
+    """
+
+    required_arguments = 0
+    has_content = True
+
+    def run(self):
+        self.assert_has_content()
+        audio_file = directives.uri(self.arguments[0])
+        full_path = posixpath.join(current_app.config['ATTACHMENT_DIR'],
+                                   audio_file)
+        if full_path not in current_app.blohg.changectx.files:
+            raise self.error(
+                'Error in "%s" directive: File not found: %s.' % (
+                    self.name, full_path
+                )
+            )
+        self.arguments[0] = url_for('attachments', filename=audio_file,
+                                    _external=True)
+        html = '''\
+
+<audio controls>
+    <source src="%s" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+'''
+        return [nodes.raw('', html % elf.arguments[0],
+            format='html')]
+
 index = {
     'vimeo': Vimeo,
     'youtube': Youtube,
@@ -459,4 +490,5 @@ index = {
     'subpages': SubPages,
     'include-hg': IncludeHg,
     'include': IncludeHg,
+    'audio-player': AudioPlayer,
 }
